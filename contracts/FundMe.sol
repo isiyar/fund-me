@@ -4,6 +4,8 @@ pragma solidity ^0.8.27;
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import "./PriceConverter.sol";
 
+error NotOwner();
+
 contract FundMe {
 	using PriceConverter for uint256;
 
@@ -19,6 +21,11 @@ contract FundMe {
 		owner = msg.sender;
 	}
 
+	modifier onlyOwner {
+		if (msg.sender != owner) revert NotOwner();
+		_;
+	}
+
 	function getVersion(address _oracleAddress) public view returns (uint256) {
 		AggregatorV3Interface dataFeed = AggregatorV3Interface(_oracleAddress);
 		return dataFeed.version();
@@ -30,7 +37,9 @@ contract FundMe {
 		addressToAmountFunded[msg.sender] += msg.value;
 	}
 
-	// function withdraw() {}
+	function withdraw() public onlyOwner() {
+		
+	}
 
 	fallback() external payable {
 		fund();
