@@ -14,11 +14,12 @@ contract FundMe {
 
 	address public owner;
 	address public oracleAddress;
-  uint256 public constant MINIMUM_USD = 50 * 1e18;
+  uint256 public MINIMUM_USD;
 
-	constructor(address oracleAddress_) {
+	constructor(address oracleAddress_, uint256 minimumUsd) {
 		oracleAddress = oracleAddress_;
 		owner = msg.sender;
+		MINIMUM_USD = minimumUsd * 1e18;
 	}
 
 	modifier onlyOwner {
@@ -38,7 +39,12 @@ contract FundMe {
 	}
 
 	function withdraw() public onlyOwner() {
-		
+		for (uint funderIndex = 0; funderIndex < funders.length; funderIndex++) {
+			addressToAmountFunded[funders[funderIndex]] = 0;
+		}
+		funders = new address[](0);
+		(bool successWithdraw,) = payable(msg.sender).call{value: address(this).balance}("");
+		require(successWithdraw, "Withdraw failed");
 	}
 
 	fallback() external payable {
