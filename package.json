@@ -2,10 +2,12 @@
   "name": "hardhat-project",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.16"
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "hardhat": "^2.22.17"
   },
   "dependencies": {
     "@chainlink/contracts": "^1.3.0",
-    "@chainlink/hardhat-chainlink": "^0.0.4"
+    "@chainlink/hardhat-chainlink": "^0.0.4",
+    "dotenv": "^16.4.7"
   }
 }
